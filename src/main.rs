@@ -30,10 +30,10 @@ fn draw_gallery() {
     pack.set_spacing(10);
     let _title_label = Frame::default()
         .with_size(100, 40)
-        .with_label("Midi to Roblox Piano");
+        .with_label("MIDI to Roblox Piano");
    
     let mut toggle_button = Button::default()
-        .with_label("Toggle RBX Midi")
+        .with_label("Toggle RBX MIDI")
         .center_of(&pack)
         .with_size(50, 50);
     toggle_button.set_callback(move |_| {
@@ -85,6 +85,27 @@ fn draw_gallery() {
     });
     pack.end();
     grp2.end();
+    let about_group = Group::new(10, 35, 500 - 20, 450 - 45, "About\t\t");
+    let mut pack = Pack::new(15, 45, 150, 450 - 45, "");
+    pack.set_spacing(10);
+
+    let title_frame = Frame::default()
+        .with_label("RBX MIDI authors:")
+        .center_of_parent()
+        .with_size(100, 40);
+    
+    let author_one_frame = Frame::default()
+        .with_label("Interfiber:\nBase program")
+        .with_size(100, 60);
+
+    let author_two_frame = Frame::default()
+        .with_label("antiLimit:\nAdded keys")
+        .with_size(100, 60);
+
+    
+    pack.end();
+    about_group.end();
+
     tab.end();
 }
 
@@ -95,7 +116,7 @@ fn main() {
 
     let mut wind = Window::default()
         .with_size(500, 450)
-        .with_label("RBXMidi - Play roblox pianos with a MIDI keyboard")
+        .with_label("RBXMIDI - Play roblox pianos with a MIDI keyboard")
         .center_screen();
 
     draw_gallery();
