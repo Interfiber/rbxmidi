@@ -4,6 +4,7 @@ use std::path::Path;
 
 pub fn listen_midi(){
     println!("Starting MIDI listener");
+    std::fs::write("/tmp/rbxmidi_midi_worker", "").expect("Failed to create worker file");
     println!("Reading cached devicename...");
     // get cached devicename
     let device = crate::state::get_device();
@@ -35,6 +36,7 @@ pub fn listen_midi(){
         if Path::new("/tmp/rbxmidi.midi_worker_stop").exists() {
             println!("Exiting, got shutdown message");
             std::fs::remove_file("/tmp/rbxmidi.midi_worker_stop").expect("Failed to remove stop file");
+            std::fs::remove_file("/tmp/rbxmidi_midi_worker").expect("Failed to remove midi worker file");
             break;
         }
     }

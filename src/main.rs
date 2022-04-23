@@ -38,12 +38,13 @@ fn draw_gallery() {
         .with_size(50, 50);
     toggle_button.set_callback(move |_| {
         println!("checking state...");
-        let state_type = state::get_state();
-        if state_type == state::StateType::Enabled {
+        let enabled = state::midi_worker_is_enabled();
+        if enabled {
             println!("state is: enabled, disabling");
+            agent::init::stop_midi_worker();
         } else {
             println!("state is: disabled, enabling");
-            agent::init::start_agent();
+            agent::init::start_midi_worker();
         }
     });
     pack.end();
@@ -88,6 +89,7 @@ fn draw_gallery() {
 }
 
 fn main() {
+    agent::init::start_agent();
     let app = app::App::default().with_scheme(app::Scheme::Gtk);
     app::background(221, 221, 221);
 

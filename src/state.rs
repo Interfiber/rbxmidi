@@ -1,30 +1,10 @@
-static STATE: state::Storage<u32> = state::Storage::new();
-// States:
-// 0 = Disabled
-// 1 = Enabled
-
-#[derive(PartialEq)]
-pub enum StateType {
-    Enabled,
-    Disabled
-}
-
-pub fn get_state() -> StateType {
-    let state = STATE.try_get();
-    if state.is_none() {
-        println!("state is empty, setting to 0");
-        STATE.set(0);
-        return StateType::Disabled;
+pub fn midi_worker_is_enabled() -> bool { 
+    if std::path::Path::new("/tmp/rbxmidi_midi_worker").exists() {
+        return true;
     } else {
-        let state_unwrapped = *STATE.get();
-        if state_unwrapped == 0 {
-            return StateType::Disabled;
-        } else {
-            return StateType::Enabled;
-        }
+        return false;
     }
 }
-
 pub fn set_device(device_name: String) {
     match std::fs::write("/tmp/rbxmidi.devicename", device_name){
         Ok(_) => println!("saved device"),
