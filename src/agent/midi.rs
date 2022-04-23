@@ -1,4 +1,5 @@
 use midir::{MidiInput, Ignore};
+use crate::key::note_press;
 use std::path::Path;
 
 pub fn listen_midi(){
@@ -12,7 +13,7 @@ pub fn listen_midi(){
     let mut midi_in = MidiInput::new("midir reading input").expect("Failed to open input");
     midi_in.ignore(Ignore::None);
     let in_ports = midi_in.ports();
-    let in_port = in_ports.get(1).expect("Failed to get MIDI port");
+    let in_port = in_ports.get(device.parse::<usize>().unwrap()).expect("Failed to get MIDI port");
     let input_port_name = midi_in.port_name(in_port).expect("Failed to get port name");
 
     // listen for keypresses
@@ -26,6 +27,7 @@ pub fn listen_midi(){
             println!("Status message: {}", message_status);
             println!("Message Data: {}", message_data);
             let converted = crate::midi::convert::byte_to_enum(message_data);
+            note_press(converted);
         }
     }, ()).expect("Failed to connect to device");
     println!("Connection open, reading data from {}", input_port_name);

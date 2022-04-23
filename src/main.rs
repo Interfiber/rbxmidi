@@ -74,7 +74,11 @@ fn draw_gallery() {
                 println!("reloaded device list");
             } else {
                 println!("saving device name to /tmp/rbxmidi.devicename");
-                state::set_device(selected_unwrap);
+                let mut selected_line_num = list.value();
+                if selected_line_num != 0 {
+                    selected_line_num = selected_line_num - 1;
+                }
+                state::set_device(selected_line_num.to_string());
             }
         }
     });
