@@ -89,16 +89,16 @@ fn draw_gallery() {
     let mut pack = Pack::new(15, 45, 150, 450 - 45, "");
     pack.set_spacing(10);
 
-    let title_frame = Frame::default()
+    let _title_frame = Frame::default()
         .with_label("RBX MIDI authors:")
         .center_of_parent()
         .with_size(100, 40);
     
-    let author_one_frame = Frame::default()
+    let _author_one_frame = Frame::default()
         .with_label("Interfiber:\nBase program")
         .with_size(100, 60);
 
-    let author_two_frame = Frame::default()
+    let _author_two_frame = Frame::default()
         .with_label("antiLimit:\nAdded keys")
         .with_size(100, 60);
 

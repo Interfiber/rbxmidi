@@ -19,7 +19,7 @@ pub fn listen_midi(){
     let input_port_name = midi_in.port_name(in_port).expect("Failed to get port name");
 
     // listen for keypresses
-    let _conn_in = midi_in.connect(in_port, "midir-read-input", move |stamp, message, _| {
+    let _conn_in = midi_in.connect(in_port, "midir-read-input", move |_, message, _| {
         // https://www.recordingblogs.com/wiki/status-byte-of-a-midi-message
         let message_status = message[0];
         // ignore MIDI clock messages

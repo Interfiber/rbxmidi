@@ -4,6 +4,9 @@ pub fn start_agent(){
     println!("RBXMidi Agent version {}", env!("CARGO_PKG_VERSION"));
     println!("Setting state...");
     println!("Starting agent background thread...");
+    if std::path::Path::new("/tmp/rbxmidi_agent.sock").exists() {
+        std::fs::remove_file("/tmp/rbxmidi_agent.sock").expect("Failed to remove socket");
+    }
     Builder::new()
         .name("rbxmidi_agent".to_string())
         .spawn(move || crate::agent::core::agent_main())
