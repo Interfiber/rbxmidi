@@ -10,6 +10,7 @@ use fltk::{
 };
 
 mod midi;
+mod agent;
 mod state;
 
 fn load_list(mut list: HoldBrowser) {
