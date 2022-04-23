@@ -12,6 +12,7 @@ use fltk::{
 mod midi;
 mod agent;
 mod state;
+mod key;
 
 fn load_list(mut list: HoldBrowser) {
     let devices = midi::finder::find_midi_devices();
@@ -42,6 +43,7 @@ fn draw_gallery() {
             println!("state is: enabled, disabling");
         } else {
             println!("state is: disabled, enabling");
+            agent::init::start_agent();
         }
     });
     pack.end();

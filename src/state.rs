@@ -34,3 +34,8 @@ pub fn set_device(device_name: String) {
         }
     }
 }
+
+pub fn get_device() -> String {
+    let data = std::fs::read_to_string("/tmp/rbxmidi.devicename").expect("Failed to read cached devicename");
+    return data.to_string();
+}
