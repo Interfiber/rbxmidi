@@ -1,5 +1,6 @@
 use midir::{MidiInput, Ignore};
 use crate::key::note_press;
+use std::time::Duration;
 use std::path::Path;
 
 pub fn listen_midi(){
@@ -39,5 +40,6 @@ pub fn listen_midi(){
             std::fs::remove_file("/tmp/rbxmidi_midi_worker").expect("Failed to remove midi worker file");
             break;
         }
+        std::thread::sleep(Duration::from_secs(3));
     }
 }
