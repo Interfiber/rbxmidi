@@ -23,12 +23,12 @@ pub fn listen_midi(){
         let message_status = message[0];
         // ignore MIDI clock messages
         if message_status != 248 && message.len() > 1 {
-            println!("Message Length: {}", message.len());
-            let message_data = message[1];
-            println!("Status message: {}", message_status);
-            println!("Message Data: {}", message_data);
-            let converted = crate::midi::convert::byte_to_enum(message_data);
-            note_press(converted);
+            if message_status == 0x90 {
+                let message_data = message[1];
+                println!("Message Data: {}", message_data);
+                let converted = crate::midi::convert::byte_to_enum(message_data);
+                note_press(converted);
+            }
         }
     }, ()).expect("Failed to connect to device");
     println!("Connection open, reading data from {}", input_port_name);
