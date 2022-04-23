@@ -13,3 +13,11 @@ sh install.sh
    - xdotool
    - cmake
    - xorg
+
+## Common Problem Solutions
+
+### Clear tmp files
+```bash
+killall rbxmidi
+rm /tmp/rbxmidi*
+```
