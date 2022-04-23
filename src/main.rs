@@ -5,9 +5,20 @@ use fltk::{
     group::{Group, Pack, Tabs},
     prelude::{GroupExt, WidgetBase, WidgetExt, WindowExt},
     window::Window,
+    browser::HoldBrowser,
+    prelude::BrowserExt,
 };
 
 mod midi;
+mod state;
+
+fn load_list(mut list: HoldBrowser) {
+    let devices = midi::finder::find_midi_devices();
+    for i in devices {
+        println!("adding device: {}", i);
+        list.add(&i);
+    }
+}
 
 fn draw_gallery() {
     let tab = Tabs::new(10, 10, 500 - 20, 450 - 20, "");
@@ -25,6 +36,12 @@ fn draw_gallery() {
         .with_size(50, 50);
     toggle_button.set_callback(move |_| {
         println!("checking state...");
+        let state_type = state::get_state();
+        if state_type == state::StateType::Enabled {
+            println!("state is: enabled, disabling");
+        } else {
+            println!("state is: disabled, enabling");
+        }
     });
     pack.end();
     grp1.end();
@@ -36,11 +53,28 @@ fn draw_gallery() {
     let _midi_label = Frame::default()
         .with_size(100, 40)
         .with_label("Select MIDI device:");
-    let devices = midi::finder::find_midi_devices();
-    for i in devices {
-        println!("adding device: {}", i);
-        let _but2 = RoundButton::default().with_size(0, 30).with_label(&i);
-    }
+    let mut list = HoldBrowser::default()
+        .with_size(700, 200);
+    load_list(list.clone());
+    list.add("Reload Devices");
+    list.clone().set_callback(move |_| {
+        let selected = list.selected_text();
+        if selected.is_none(){
+            println!("nothing selected, skipping");
+        } else {
+            let selected_unwrap = selected.unwrap();
+            if selected_unwrap == "Reload Devices" {
+                println!("reloading device list");
+                list.clear();
+                load_list(list.clone());
+                list.add("Reload Devices");
+                println!("reloaded device list");
+            } else {
+                println!("saving device name to /tmp/rbxmidi.devicename");
+                state::set_device(selected_unwrap);
+            }
+        }
+    });
     pack.end();
     grp2.end();
     tab.end();
@@ -52,7 +86,7 @@ fn main() {
 
     let mut wind = Window::default()
         .with_size(500, 450)
-        .with_label("Tabs")
+        .with_label("RBXMidi - Play roblox pianos with a MIDI keyboard")
         .center_screen();
 
     draw_gallery();
