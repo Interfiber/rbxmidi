@@ -8,3 +8,8 @@ First clone this repo and run the following command in the cloned folder:
 ```bash
 sh install.sh
 ```
+
+## Dependencies
+   - xdotool
+   - cmake
+   - xorg
