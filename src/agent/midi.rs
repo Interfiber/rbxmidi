@@ -27,8 +27,21 @@ pub fn listen_midi(){
             if message_status == 0x90 {
                 let message_data = message[1];
                 println!("Message Data: {}", message_data);
-                let converted = crate::midi::convert::byte_to_enum(message_data);
-                note_press(converted);
+                // macos does not emit a note off event, instead it emits a note on with a pitch of
+                // zero
+                if cfg!(target_os = "macos") {
+                    // check if we have 3(2) indexes
+                    if message.len() == 2 {
+                        let message_pitch = message[2];
+                        if message_pitch != 0 {
+                            let converted = crate::midi::convert::byte_to_enum(message_data);
+                            note_press(converted);
+                        }
+                    }
+                } else {
+                    let converted = crate::midi::convert::byte_to_enum(message_data);
+                    note_press(converted);
+                }
             }
         }
     }, ()).expect("Failed to connect to device");
