@@ -21,3 +21,6 @@ sh install.sh
 killall rbxmidi
 rm /tmp/rbxmidi*
 ```
+
+## Compiling fails on MacOS
+Make sure you are running the latest version of MacOS
