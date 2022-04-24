@@ -33,18 +33,20 @@ fn draw_gallery() {
         .with_label("MIDI to Roblox Piano");
    
     let mut toggle_button = Button::default()
-        .with_label("Toggle RBX MIDI")
+        .with_label("Enable RBX MIDI")
         .center_of(&pack)
         .with_size(50, 50);
-    toggle_button.set_callback(move |_| {
+    toggle_button.clone().set_callback(move |_| {
         println!("checking state...");
         let enabled = state::midi_worker_is_enabled();
         if enabled {
             println!("state is: enabled, disabling");
             agent::init::stop_midi_worker();
+            toggle_button.set_label("Enable RBX MIDI");
         } else {
             println!("state is: disabled, enabling");
             agent::init::start_midi_worker();
+            toggle_button.set_label("Disable RBX MIDI");
         }
     });
     pack.end();

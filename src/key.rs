@@ -1,11 +1,27 @@
-use enigo::{Enigo, Key, KeyboardControllable};
 use crate::midi::convert::Note;
 
-pub fn press_key(key: String){
+#[cfg(target_os = "macos")]
+fn macos_press_key(key: String){
+    mkeypress::send_key_wrap(key);
+}
+
+#[cfg(target_os = "linux")]
+use enigo::KeyboardControllable;
+use enigo::Key;
+use enigo::Enigo;
+fn linux_press_key(key: String){
     let mut enigo = Enigo::new();
     let key_char: Vec<char> = key.chars().collect();
     enigo.key_down(Key::Layout(key_char[0]));
     enigo.key_up(Key::Layout(key_char[0]));
+}
+
+pub fn press_key(key: String){
+    #[cfg(target_os = "linux")]
+    linux_press_key(key);
+
+    #[cfg(target_os = "macos")]
+    macos_press_key(key);
 }
 
 pub fn note_press(note: Note) {
