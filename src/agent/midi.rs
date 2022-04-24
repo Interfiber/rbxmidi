@@ -30,8 +30,8 @@ pub fn listen_midi(){
                 // macos does not emit a note off event, instead it emits a note on with a pitch of
                 // zero
                 if cfg!(target_os = "macos") {
-                    // check if we have 3(2) indexes
-                    if message.len() == 2 {
+                    // check if we have 3 indexes
+                    if message.len() == 3 {
                         let message_pitch = message[2];
                         if message_pitch != 0 {
                             let converted = crate::midi::convert::byte_to_enum(message_data);
