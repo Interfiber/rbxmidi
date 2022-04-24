@@ -2,14 +2,15 @@ use crate::midi::convert::Note;
 
 #[cfg(target_os = "macos")]
 fn macos_press_key(key: String){
-    mkeypress::send_key_wrap(key);
+    let key_char: Vec<char> = key.chars().collect();
+    mkeypress::send_key_wrap(key_char[0]);
 }
 
 #[cfg(target_os = "linux")]
-use enigo::KeyboardControllable;
-use enigo::Key;
-use enigo::Enigo;
 fn linux_press_key(key: String){
+    use enigo::Enigo;
+    use enigo::Key;
+    use enigo::KeyboardControllable;
     let mut enigo = Enigo::new();
     let key_char: Vec<char> = key.chars().collect();
     enigo.key_down(Key::Layout(key_char[0]));

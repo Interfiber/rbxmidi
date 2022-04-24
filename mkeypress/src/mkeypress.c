@@ -47,8 +47,6 @@ ev = CGEventCreateKeyboardEvent (source, letter, false);
 CGEventSetFlags(ev,flags | CGEventGetFlags(ev)); //combine flags                        
 CGEventPost(kCGHIDEventTap,ev); 
 CFRelease(ev);              
-
-CFRelease(source);
 }
 
 void release_key(int key){
