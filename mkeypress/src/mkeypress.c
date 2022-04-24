@@ -32,14 +32,23 @@ void press_key(int key){
 }
 
 void press_shift_key(int letter){
-    CGEventRef event1, e5;
-    event1 = CGEventCreateKeyboardEvent(NULL, (CGKeyCode)letter, true);//'z' keydown event
-    CGEventSetFlags(event1, kCGEventFlagMaskShift);//set shift key down for above event
-    CGEventPost(kCGSessionEventTap, event1);//post event
-    e5 = CGEventCreateKeyboardEvent(NULL, (CGKeyCode)kVK_Shift, false);
-    CGEventPost(kCGSessionEventTap, e5);
-    CFRelease(event1);
-    CFRelease(e5);
+CGEventFlags flags = kCGEventFlagMaskShift;
+CGEventRef ev;
+CGEventSourceRef source = CGEventSourceCreate (kCGEventSourceStateCombinedSessionState);
+
+//press down            
+ev = CGEventCreateKeyboardEvent (source, letter, true);    
+CGEventSetFlags(ev,flags | CGEventGetFlags(ev)); //combine flags                        
+CGEventPost(kCGHIDEventTap,ev);
+CFRelease(ev);              
+
+//press up                                  
+ev = CGEventCreateKeyboardEvent (source, letter, false);                       
+CGEventSetFlags(ev,flags | CGEventGetFlags(ev)); //combine flags                        
+CGEventPost(kCGHIDEventTap,ev); 
+CFRelease(ev);              
+
+CFRelease(source);
 }
 
 void release_key(int key){
