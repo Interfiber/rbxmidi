@@ -6,12 +6,13 @@ use fltk::{
     prelude::{GroupExt, WidgetBase, WidgetExt, WindowExt},
     window::Window,
     browser::HoldBrowser,
-    prelude::BrowserExt,
+    prelude::{BrowserExt, InputExt}, input::FileInput,
 };
 
 mod midi;
 mod agent;
 mod state;
+mod midiloader;
 mod key;
 
 fn load_list(mut list: HoldBrowser) {
@@ -36,6 +37,15 @@ fn draw_gallery() {
         .with_label("Enable RBX MIDI")
         .center_of(&pack)
         .with_size(50, 50);
+    let mut play_midi_button = Button::default()
+        .with_label("Toggle MIDI file player")
+        .center_of(&pack)
+        .with_size(70,70);
+    let mut midi_file_path = FileInput::default()
+        .center_of(&pack)
+        .with_size(100, 100);
+
+    midi_file_path.append("/tmp/examplefile.mid").expect("Failed to append data to widget");
     toggle_button.clone().set_callback(move |_| {
         println!("checking state...");
         let enabled = state::midi_worker_is_enabled();
@@ -48,6 +58,9 @@ fn draw_gallery() {
             agent::init::start_midi_worker();
             toggle_button.set_label("Disable RBX MIDI");
         }
+    });
+    play_midi_button.clone().set_callback(move |_| {
+	agent::init::start_midi_file_worker(&midi_file_path.value());
     });
     pack.end();
     grp1.end();

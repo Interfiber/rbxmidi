@@ -21,7 +21,7 @@ pub fn start_midi_worker(){
     println!("sent message to worker");
 }
 
-pub fn start_midi_file_worker(path: &str){
+pub fn start_midi_&file_worker(path: &str){
     println!("connecting to socket");
     let mut stream = UnixStream::connect("/tmp/rbxmidi_agent.sock").expect("Failed to connect to agent socket");
     println!("sending activate message");

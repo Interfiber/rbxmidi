@@ -1,3 +1,4 @@
+#[derive(Debug)]
 pub enum Note {
     C2,
     C2Sharp,
