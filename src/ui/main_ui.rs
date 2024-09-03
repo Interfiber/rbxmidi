@@ -8,6 +8,7 @@ pub struct UserInterface {
     pub device_manager: DeviceManager,
     pub is_connected: bool,
     pub is_activated: bool,
+    pub config: Option<crate::config::RobloxMidiConfig>
 }
 
 impl UserInterface {
@@ -50,8 +51,14 @@ impl UserInterface {
                     }
                 });
 
+            if self.is_connected {
+                ui.disable();
+            }
+
             if ui.button("Connect").clicked() {
                 self.device_manager.connect_device(&mut self.device);
+
+                self.is_connected = true;
             }
         });
 
@@ -74,6 +81,7 @@ impl UserInterface {
             device_manager: DeviceManager::default(),
             is_connected: false,
             is_activated: false,
+            config: None
         }
     }
 }

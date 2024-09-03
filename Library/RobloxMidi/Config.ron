@@ -1,6 +1,6 @@
 RobloxMidiConfig(
     // Author of this config
-    author: "Interfiber"
+    author: "Interfiber",
 
     keys: {
         C2: "E" 

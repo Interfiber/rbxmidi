@@ -102,7 +102,7 @@ impl Device {
 
         let mut devices: Vec<Device> = vec![];
 
-        for (i, port) in midi_input.ports().iter().enumerate() {
+        for (_i, port) in midi_input.ports().iter().enumerate() {
             if let Ok(port_name) = midi_input.port_name(&port) {
                 info!("Found device with name '{}'", port_name);
 

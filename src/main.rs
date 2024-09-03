@@ -5,9 +5,12 @@ pub mod ui;
 pub mod midi;
 pub mod config;
 
+use config::RobloxMidiConfig;
 use eframe::egui;
 use log::info;
 use ui::main_ui::UserInterface;
+
+const DATA_PATH: &str = "Library/RobloxMidi/Config.ron";
 
 fn main() -> eframe::Result {
     env_logger::init(); // Log to stderr (if you run with `RUST_LOG=debug`).
@@ -17,6 +20,12 @@ fn main() -> eframe::Result {
     let mut user_interface: ui::main_ui::UserInterface = UserInterface::new();
 
     user_interface.device_manager = midi::device::Device::get_devices();
+
+    info!("Loading key config from: {}...", DATA_PATH);
+
+    user_interface.config = Some(RobloxMidiConfig::load(DATA_PATH));
+
+    info!("Config authored by: {}", user_interface.config.as_ref().unwrap().author);
 
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default().with_inner_size([320.0, 240.0]),
