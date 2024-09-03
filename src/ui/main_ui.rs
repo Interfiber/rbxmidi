@@ -1,3 +1,5 @@
+use std::sync::mpsc::Sender;
+
 use egui::{Color32, RichText, Ui};
 use log::info;
 
@@ -8,7 +10,7 @@ pub struct UserInterface {
     pub device_manager: DeviceManager,
     pub is_connected: bool,
     pub is_activated: bool,
-    pub config: Option<crate::config::RobloxMidiConfig>
+    pub device_thread_sender: Option<Sender<String>>
 }
 
 impl UserInterface {
@@ -56,7 +58,7 @@ impl UserInterface {
             }
 
             if ui.button("Connect").clicked() {
-                self.device_manager.connect_device(&mut self.device, self.config.clone().unwrap());
+                self.device_manager.connect_device(&mut self.device, self.device_thread_sender.clone());
 
                 self.is_connected = true;
             }
@@ -81,7 +83,7 @@ impl UserInterface {
             device_manager: DeviceManager::default(),
             is_connected: false,
             is_activated: false,
-            config: None
+            device_thread_sender: None
         }
     }
 }

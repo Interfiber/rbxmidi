@@ -1,18 +1,12 @@
-use enigo::{Enigo, Key, Keyboard, Settings};
-use log::{debug, error, info, trace};
-use midi_control::MidiMessage;
-use midir::{MidiInput, MidiInputPort};
-use std::{sync::mpsc::channel, time::Duration};
-
-use crate::{config::RobloxMidiConfig, midi::data::Note};
+use log::info;
+use midir::MidiInput;
+use std::sync::mpsc::Sender;
 
 extern crate midi_control;
 extern crate midir;
 
 pub struct Device {
     pub name: String,
-    pub sender: Option<std::sync::mpsc::Sender<MidiMessage>>,
-    pub receiver: Option<std::sync::mpsc::Receiver<MidiMessage>>,
     pub is_connected: bool,
 }
 
@@ -29,72 +23,12 @@ impl DeviceManager {
         }
     }
 
-    pub fn connect_device(&self, device: &mut Device, config: RobloxMidiConfig) {
-        let mut port: Option<MidiInputPort> = None;
-
-        // We need to create a new input device....
-        let mut input = MidiInput::new("RobloxMidi").unwrap();
-        input.ignore(midir::Ignore::None);
-
-        for t_port in input.ports() {
-            if device.name == input.port_name(&t_port).expect("No device name!") {
-                port = Some(t_port);
-
-                break;
-            }
-        }
-
-        if port.is_none() {
-            error!("Failed to find device!");
-
-            return;
-        }
-
-        let (sender, receiver) = channel::<MidiMessage>();
-
+    pub fn connect_device(&self, device: &mut Device, sender: Option<Sender<String>>) {
         device.is_connected = true;
 
-        device.sender = Some(sender.clone());
-        device.receiver = Some(receiver);
+        sender.unwrap().send(device.name.clone()).expect("Failed to send device name to worker thread");
 
-        let _conn_in = input
-            .connect(
-                &port.clone().expect("No port on device"),
-                "midir-read-input",
-                move |_timestamp, data, sender| {
-                    let msg = MidiMessage::from(data);
-
-                    match msg {
-                        MidiMessage::NoteOn(_channel, keyEvent) => {
-                            let note = Note::to_enum(keyEvent.key);
-                            let key = match config.keys.get(&note) {
-                                Some(k) => k,
-                                None => {
-                                    error!("Invalid note: {:#?}", note);
-
-                                    return;
-                                }
-                            };
-
-                            let mut enigo = Enigo::new(&Settings::default()).unwrap();
-                            
-                            enigo.key(Key::Unicode(key.as_bytes()[0] as char), enigo::Direction::Press).expect("Failed to press key!");
-                        }
-
-                        _ => trace!("Ignoring midi message of type: {:#?}", msg),
-                    };
-
-                    
-                },
-                (),
-            )
-            .expect("Failed to connect to device!");
-
-        info!("Connected to device '{}'", device.name);
-
-        loop {
-            std::thread::sleep(Duration::from_millis(100)); // FIXME: Somehow push device code to another thread
-        }
+        info!("Prompted connection to device '{}'", device.name);
     }
 }
 
@@ -102,8 +36,6 @@ impl Device {
     pub fn default() -> Device {
         Device {
             name: String::from("No Device"),
-            sender: None,
-            receiver: None,
             is_connected: false,
         }
     }
@@ -121,8 +53,6 @@ impl Device {
 
                 let device: Device = Device {
                     name: port_name,
-                    sender: None,
-                    receiver: None,
                     is_connected: false,
                 };
 
