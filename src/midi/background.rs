@@ -8,7 +8,7 @@ use parking_lot::Mutex;
 
 use crate::{config, midi::data::Note};
 
-const DATA_PATH: &str = "Library/RobloxMidi/Config.ron";
+const DATA_PATH: &str = "Library/RobloxMidi/Config.ron:/usr/local/share/rbxmidi/Library/RobloxMidi/Config.ron";
 
 #[derive(PartialEq)]
 pub enum WorkerTaskType {

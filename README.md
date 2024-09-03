@@ -1,4 +1,4 @@
 # Roblox MIDI v2.0
-Complete rewrite of the entire program, bug fixes, and more!
+Play Roblox pianos with your physical MIDI keyboard
 
-![](./demo.png)
+## Installing
