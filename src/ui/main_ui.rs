@@ -56,7 +56,7 @@ impl UserInterface {
             }
 
             if ui.button("Connect").clicked() {
-                self.device_manager.connect_device(&mut self.device);
+                self.device_manager.connect_device(&mut self.device, self.config.clone().unwrap());
 
                 self.is_connected = true;
             }

@@ -1,6 +1,7 @@
+use log::error;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize, Hash, Eq, PartialEq)]
+#[derive(Debug, Serialize, Deserialize, Hash, Eq, PartialEq, Clone)]
 pub enum Note {
     C2,
     C2Sharp,
@@ -253,7 +254,7 @@ impl Note {
                 return Note::C7;
             }
             _ => {
-                println!("Invalid byte");
+                error!("Invalid byte: {:#?}", byte);
                 return Note::InvalidByte;
             }
         }

@@ -7,7 +7,7 @@ use crate::midi::data::Note;
 /**
  * Config loaded from Library/RobloxMidi/Config.ron
  */
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct RobloxMidiConfig {
     pub author: String,
     pub keys: HashMap<Note, String>

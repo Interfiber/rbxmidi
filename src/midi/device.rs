@@ -1,9 +1,9 @@
-use log::{debug, error, info};
+use log::{debug, error, info, trace};
 use midi_control::MidiMessage;
 use midir::{MidiInput, MidiInputPort};
-use std::{io::stdin, sync::mpsc::channel, time::Duration};
+use std::{sync::mpsc::channel, time::Duration};
 
-use crate::midi::data::Note;
+use crate::{config::RobloxMidiConfig, midi::data::Note};
 
 extern crate midi_control;
 extern crate midir;
@@ -28,7 +28,7 @@ impl DeviceManager {
         }
     }
 
-    pub fn connect_device(&self, device: &mut Device) {
+    pub fn connect_device(&self, device: &mut Device, config: RobloxMidiConfig) {
         let mut port: Option<MidiInputPort> = None;
 
         // We need to create a new input device....
@@ -66,9 +66,19 @@ impl DeviceManager {
                     match msg {
                         MidiMessage::NoteOn(_channel, keyEvent) => {
                             let note = Note::to_enum(keyEvent.key);
+                            let key = match config.keys.get(&note) {
+                                Some(k) => k,
+                                None => {
+                                    error!("Invalid note: {:#?}", note);
+
+                                    return;
+                                }
+                            };
+
+                            debug!("{}", key);
                         }
 
-                        _ => debug!("Ignoring midi message of type: {:#?}", msg),
+                        _ => trace!("Ignoring midi message of type: {:#?}", msg),
                     };
 
                     
