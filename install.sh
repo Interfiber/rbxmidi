@@ -18,6 +18,7 @@ echo "Installing binary..."
 sudo cp ./target/release/rbxmidi /usr/local/bin/rbxmidi
 
 echo "Installing desktop entry..."
+sudo mkdir -p /usr/local/share/applications
 sudo cp RobloxMidi.desktop /usr/local/share/applications/
 
 echo "!! Roblox MIDI is installed !!"
