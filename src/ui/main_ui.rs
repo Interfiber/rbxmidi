@@ -1,6 +1,6 @@
 use std::sync::mpsc::Sender;
 
-use egui::{Color32, RichText, Ui};
+use egui::{global_dark_light_mode_buttons, Color32, RichText, Ui};
 use log::info;
 
 use crate::midi::{background::WorkerTaskPacket, device::{Device, DeviceManager}};
@@ -15,8 +15,11 @@ pub struct UserInterface {
 
 impl UserInterface {
     pub fn render(&mut self, ui: &mut Ui) {
-        ui.heading("Roblox Midi v2.0");
-        // ui.label("Connected: No\tActivated: No");
+        ui.horizontal(|ui| {
+            ui.heading("Roblox Midi v2.0");
+
+            global_dark_light_mode_buttons(ui);
+        });
 
         ui.horizontal(|ui| {
             ui.label("Connected ");
