@@ -1,10 +1,24 @@
 #!/usr/bin/env bash
 
+if [ ! -f "$(which cargo)" ]; then
+    echo "Rust is not installed, please install it!"
+    exit 1
+fi
+
 echo "Building..."
-cargo b --release
+cargo build --release
+
 echo "Installing..."
-mkdir -p $HOME/.local/share/bin
-mkdir -p $HOME/.local/share/applications
-cp target/release/rbxmidi $HOME/.local/share/bin/rbxmidi
-cp rbxmidi.desktop $HOME/.local/share/applications/rbxmidi.desktop
-echo "Done."
+sudo mkdir -p /usr/local/share/rbxmidi
+
+echo "Installing Library..."
+sudo cp -r Library /usr/local/share/rbxmidi/
+
+echo "Installing binary..."
+sudo cp ./target/release/rbxmidi /usr/local/bin/rbxmidi
+
+echo "Installing desktop entry..."
+sudo mkdir -p /usr/local/share/applications
+sudo cp RobloxMidi.desktop /usr/local/share/applications/
+
+echo "!! Roblox MIDI is installed !!"

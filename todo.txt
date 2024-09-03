@@ -1,0 +1,1 @@
+* Indicator light (Red/Green)
