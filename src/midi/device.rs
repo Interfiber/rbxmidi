@@ -1,3 +1,4 @@
+use enigo::{Enigo, Key, Keyboard, Settings};
 use log::{debug, error, info, trace};
 use midi_control::MidiMessage;
 use midir::{MidiInput, MidiInputPort};
@@ -75,7 +76,9 @@ impl DeviceManager {
                                 }
                             };
 
-                            debug!("{}", key);
+                            let mut enigo = Enigo::new(&Settings::default()).unwrap();
+                            
+                            enigo.key(Key::Unicode(key.as_bytes()[0] as char), enigo::Direction::Press).expect("Failed to press key!");
                         }
 
                         _ => trace!("Ignoring midi message of type: {:#?}", msg),
