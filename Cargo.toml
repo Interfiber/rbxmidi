@@ -3,17 +3,12 @@ name = "rbxmidi"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
-midir = "0.7.0" # Cross-platform access to MIDI
-fltk = "^1.3" # Cross-platform GUI library
-once_cell = "1.13.0" # Global state
-midly = "0.5" # MIDI file parser
-hashbrown = "0.12.3"
-
-[target.'cfg(target_os = "macos")'.dependencies]
-mkeypress = { path = "./mkeypress" }
-
-[target.'cfg(unix)'.dependencies]
-enigo = "0.0.14" # Send keypresses on linux and windows(have not tested on windows, break on mac)
+eframe = "0.28.1"
+egui = "0.28.1"
+env_logger = "0.11.5"
+log = "0.4.22"
+midi-control = "0.2.2"
+midir = "0.10.0"
+ron = "0.8"
+serde = { version = "1", features = ["derive"] }

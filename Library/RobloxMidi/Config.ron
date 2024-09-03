@@ -1,0 +1,8 @@
+RobloxMidiConfig(
+    // Author of this config
+    author: "Interfiber"
+
+    keys: {
+        C2: "E" 
+    }
+)
