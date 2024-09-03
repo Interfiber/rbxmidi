@@ -3,14 +3,14 @@ use std::sync::mpsc::Sender;
 use egui::{Color32, RichText, Ui};
 use log::info;
 
-use crate::midi::device::{Device, DeviceManager};
+use crate::midi::{background::WorkerTaskPacket, device::{Device, DeviceManager}};
 
 pub struct UserInterface {
     pub device: Device,
     pub device_manager: DeviceManager,
     pub is_connected: bool,
     pub is_activated: bool,
-    pub device_thread_sender: Option<Sender<String>>
+    pub device_thread_sender: Option<Sender<WorkerTaskPacket>>
 }
 
 impl UserInterface {
@@ -61,6 +61,7 @@ impl UserInterface {
                 self.device_manager.connect_device(&mut self.device, self.device_thread_sender.clone());
 
                 self.is_connected = true;
+                self.is_activated = true;
             }
         });
 
@@ -69,6 +70,15 @@ impl UserInterface {
         ui.horizontal(|ui| {
             if ui.button("Start/stop").clicked() {
                 info!("Toggling RBXMIDI");
+
+                self.is_activated = !self.is_activated;
+
+                let packet = WorkerTaskPacket {
+                    task_type: crate::midi::background::WorkerTaskType::Pause,
+                    data: (!self.is_activated).to_string()
+                };
+
+                self.device_thread_sender.clone().unwrap().send(packet).expect("Failed to send pause packet");
             }
 
             if ui.button("Quit RBXMidi").clicked() {

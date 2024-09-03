@@ -2,6 +2,8 @@ use log::info;
 use midir::MidiInput;
 use std::sync::mpsc::Sender;
 
+use super::background::WorkerTaskPacket;
+
 extern crate midi_control;
 extern crate midir;
 
@@ -23,10 +25,15 @@ impl DeviceManager {
         }
     }
 
-    pub fn connect_device(&self, device: &mut Device, sender: Option<Sender<String>>) {
+    pub fn connect_device(&self, device: &mut Device, sender: Option<Sender<WorkerTaskPacket>>) {
         device.is_connected = true;
 
-        sender.unwrap().send(device.name.clone()).expect("Failed to send device name to worker thread");
+        let packet = WorkerTaskPacket {
+            task_type: crate::midi::background::WorkerTaskType::DeviceName,
+            data: device.name.clone()
+        };
+
+        sender.unwrap().send(packet).expect("Failed to send device name to worker thread");
 
         info!("Prompted connection to device '{}'", device.name);
     }

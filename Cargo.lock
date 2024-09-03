@@ -2513,6 +2513,7 @@ dependencies = [
  "log",
  "midi-control",
  "midir 0.10.0",
+ "parking_lot",
  "ron",
  "serde",
 ]
