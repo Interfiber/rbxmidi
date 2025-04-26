@@ -7,6 +7,12 @@ fi
 
 echo "Building..."
 cargo build --release
+status=$?
+
+if [[ $status != 0 ]]; then
+    echo "Build failed. Aborting install"
+    exit 1
+fi
 
 echo "Installing..."
 sudo mkdir -p /usr/local/share/rbxmidi
