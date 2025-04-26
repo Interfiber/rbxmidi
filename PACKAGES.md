@@ -11,3 +11,4 @@ The recommended way to do this is via [rustup](https://rustup.rs)
 - `build-essential`
 - `pkg-config`
 - `libasound2-dev`
+- `libxdo-dev`
